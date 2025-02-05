@@ -14,9 +14,8 @@ jobs:
       uses: actions/setup-go@v4
       with:
         go-version-file: "./go.mod"
-    - name: Release
-      run: go test -v ./...
+    - name: Test
+      run: go test  ./...
     - name: CheckTag
       run: |
-        echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
-        echo "Tag name from github.ref_name: ${{  github.ref_name }}"
+        GOPROXY=proxy.golang.org go list -m github.com/nerdwave-nick/pokeapi-go@$GITHUB_REF_NAME
