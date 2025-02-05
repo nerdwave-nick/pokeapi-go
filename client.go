@@ -20,20 +20,56 @@ type Cache interface {
 	Get(endpoint string, value any) (bool, error)
 }
 
-type Client struct {
-	cache  Cache
-	client http.Client
+type noopCache struct{}
+
+func (*noopCache) Set(endpoint string, value any) error {
+	return nil
 }
 
-func NewClient(cache Cache, client http.Client) *Client {
+func (*noopCache) Get(endpoint string, value any) (bool, error) {
+	return false, nil
+}
+
+type Client struct {
+	cache   Cache
+	client  *http.Client
+	baseUrl string
+}
+
+func NewClient(cache Cache, client *http.Client) *Client {
+	if cache == nil {
+		cache = &noopCache{}
+	}
+	if client == nil {
+		client = http.DefaultClient
+	}
 	return &Client{
-		cache:  cache,
-		client: client,
+		cache:   cache,
+		client:  client,
+		baseUrl: base_url,
 	}
 }
 
+func (c *Client) WithBaseURL(newBaseUrl string) *Client {
+	return &Client{
+		cache:   c.cache,
+		client:  c.client,
+		baseUrl: c.baseUrl,
+	}
+}
+
+func (c *Client) sanitizeBaseURL(endpoint string) string {
+	_, after, found := strings.Cut(endpoint, c.baseUrl)
+	if found {
+		endpoint = after
+	}
+	return c.baseUrl + endpoint
+}
+
 func doUncached[T any](c *Client, endpoint string) (*T, error) {
-	resp, err := c.client.Get(base_url + endpoint)
+	endpoint = c.sanitizeBaseURL(endpoint)
+
+	resp, err := c.client.Get(endpoint)
 	if err != nil {
 		return nil, err
 	}
@@ -49,19 +85,15 @@ func doUncached[T any](c *Client, endpoint string) (*T, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	err = c.cache.Set(endpoint, v)
-	if err != nil {
-		return nil, err
-	}
 	return v, nil
 }
 
 func do[T any](c *Client, endpoint string) (*T, error) {
-	_, after, found := strings.Cut(endpoint, base_url)
+	_, after, found := strings.Cut(endpoint, c.baseUrl)
 	if found {
 		endpoint = after
 	}
+
 	value := new(T)
 	found, err := c.cache.Get(endpoint, value)
 	if err != nil {
@@ -71,7 +103,7 @@ func do[T any](c *Client, endpoint string) (*T, error) {
 		return value, nil
 	}
 
-	resp, err := c.client.Get(base_url + endpoint)
+	resp, err := c.client.Get(endpoint)
 	if err != nil {
 		return nil, err
 	}
