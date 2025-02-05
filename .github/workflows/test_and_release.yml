@@ -1,0 +1,22 @@
+name: Test and Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version-file: "./go.mod"
+    - name: Release
+      run: go test -v ./...
+    - name: CheckTag
+      run: |
+        echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
+        echo "Tag name from github.ref_name: ${{  github.ref_name }}"
