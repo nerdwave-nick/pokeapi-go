@@ -2,6 +2,7 @@ package pokeapi
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -33,10 +34,14 @@ func (*noopCache) Get(endpoint string, value any) (bool, error) {
 type Client struct {
 	cache   Cache
 	client  *http.Client
-	baseUrl string
+	BaseURL string
 }
 
-func NewClient(cache Cache, client *http.Client) *Client {
+func New(cache Cache, client *http.Client) *Client {
+	return NewWithBaseURL(cache, client, base_url)
+}
+
+func NewWithBaseURL(cache Cache, client *http.Client, baseUrl string) *Client {
 	if cache == nil {
 		cache = &noopCache{}
 	}
@@ -46,24 +51,16 @@ func NewClient(cache Cache, client *http.Client) *Client {
 	return &Client{
 		cache:   cache,
 		client:  client,
-		baseUrl: base_url,
-	}
-}
-
-func (c *Client) WithBaseURL(newBaseUrl string) *Client {
-	return &Client{
-		cache:   c.cache,
-		client:  c.client,
-		baseUrl: c.baseUrl,
+		BaseURL: baseUrl,
 	}
 }
 
 func (c *Client) sanitizeBaseURL(endpoint string) string {
-	_, after, found := strings.Cut(endpoint, c.baseUrl)
+	_, after, found := strings.Cut(endpoint, c.BaseURL)
 	if found {
 		endpoint = after
 	}
-	return c.baseUrl + endpoint
+	return c.BaseURL + endpoint
 }
 
 func (c *Client) doUncached(output any, endpoint string) error {
@@ -71,18 +68,19 @@ func (c *Client) doUncached(output any, endpoint string) error {
 
 	resp, err := c.client.Get(endpoint)
 	if err != nil {
-		return err
+		return fmt.Errorf("requesting body from %q: %w", endpoint, err)
 	}
 
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return err
+		return fmt.Errorf("reading body from %q: %w", endpoint, err)
 	}
 	err = json.Unmarshal(body, output)
 	if err != nil {
-		return err
+		fmt.Printf("error unmarshalling body:\n%s\n", body)
+		return fmt.Errorf("unmarshalling json from %q: %w", endpoint, err)
 	}
 	return nil
 }
@@ -92,7 +90,7 @@ func (c *Client) do(output any, endpoint string) error {
 
 	found, err := c.cache.Get(endpoint, output)
 	if err != nil {
-		return err
+		return fmt.Errorf("checking cache for %q: %w", endpoint, err)
 	}
 	if found {
 		return nil
@@ -100,23 +98,24 @@ func (c *Client) do(output any, endpoint string) error {
 
 	resp, err := c.client.Get(endpoint)
 	if err != nil {
-		return err
+		return fmt.Errorf("requesting body from %q: %w", endpoint, err)
 	}
 
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return err
+		return fmt.Errorf("reading body from %q: %w", endpoint, err)
 	}
 	err = json.Unmarshal(body, output)
 	if err != nil {
-		return err
+		fmt.Printf("error unmarshalling body:\n\n%s", body)
+		return fmt.Errorf("unmarshalling json from %q: %w", endpoint, err)
 	}
 
 	err = c.cache.Set(endpoint, output)
 	if err != nil {
-		return err
+		return fmt.Errorf("writing cache for %q: %w", endpoint, err)
 	}
 	return nil
 }
