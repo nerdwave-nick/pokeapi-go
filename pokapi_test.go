@@ -11,21 +11,20 @@ import (
 
 	"github.com/andreyvit/diff"
 	"github.com/nerdwave-nick/pokeapi-go"
-	"github.com/nerdwave-nick/pokeapi-go/testdata"
 )
 
 var responses = map[string][]byte{
 	"/status":                          []byte(`{"message": "ok"}`),
-	"/berry/1":                         testdata.Berry1,
-	"/berry/32":                        testdata.Berry32,
-	"/berry-firmness/2":                testdata.BerryFirmness2,
-	"/berry-firmness?limit=1&offset=4": testdata.BerryFirmnessL1O4,
-	"/berry-flavor/1":                  testdata.BerryFlavor1,
-	"/berry-flavor?limit=3&offset=2":   testdata.BerryFlavorL3O2,
-	"/berry?limit=1&offset=1":          testdata.BerryL1O1,
-	"/berry?limit=1&offset=63":         testdata.BerryL1O63,
-	"/berry?limit=1&offset=64":         testdata.BerryL1O64,
-	"/berry?limit=3&offset=0":          testdata.BerryL3O0,
+	"/berry/1":                         Berry1,
+	"/berry/32":                        Berry32,
+	"/berry-firmness/2":                BerryFirmness2,
+	"/berry-firmness?limit=1&offset=4": BerryFirmnessL1O4,
+	"/berry-flavor/1":                  BerryFlavor1,
+	"/berry-flavor?limit=3&offset=2":   BerryFlavorL3O2,
+	"/berry?limit=1&offset=1":          BerryL1O1,
+	"/berry?limit=1&offset=63":         BerryL1O63,
+	"/berry?limit=1&offset=64":         BerryL1O64,
+	"/berry?limit=3&offset=0":          BerryL3O0,
 }
 
 type TestNamedAPIResourcesListValue struct {
