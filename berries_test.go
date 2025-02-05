@@ -12,12 +12,12 @@ func TestBerry(t *testing.T) {
 	tests := []struct {
 		Limit  int
 		Offset int
-		Reply  *pokeapi.NamedAPIResourceList
+		Reply  pokeapi.NamedAPIResourceList
 	}{
 		{
 			Limit:  3,
 			Offset: 0,
-			Reply: &pokeapi.NamedAPIResourceList{
+			Reply: pokeapi.NamedAPIResourceList{
 				Count:    64,
 				Next:     "https://pokeapi.co/api/v2/berry?offset=3&limit=3",
 				Previous: "",
@@ -40,7 +40,7 @@ func TestBerry(t *testing.T) {
 		{
 			Limit:  1,
 			Offset: 1,
-			Reply: &pokeapi.NamedAPIResourceList{
+			Reply: pokeapi.NamedAPIResourceList{
 				Count:    64,
 				Next:     "https://pokeapi.co/api/v2/berry?offset=2&limit=1",
 				Previous: "https://pokeapi.co/api/v2/berry?offset=0&limit=1",
@@ -55,7 +55,7 @@ func TestBerry(t *testing.T) {
 		{
 			Limit:  1,
 			Offset: 63,
-			Reply: &pokeapi.NamedAPIResourceList{
+			Reply: pokeapi.NamedAPIResourceList{
 				Count:    64,
 				Next:     "",
 				Previous: "https://pokeapi.co/api/v2/berry?offset=62&limit=1",
@@ -70,7 +70,7 @@ func TestBerry(t *testing.T) {
 		{
 			Limit:  1,
 			Offset: 64,
-			Reply: &pokeapi.NamedAPIResourceList{
+			Reply: pokeapi.NamedAPIResourceList{
 				Count:    64,
 				Next:     "",
 				Previous: "https://pokeapi.co/api/v2/berry?offset=63&limit=1",
@@ -85,26 +85,293 @@ func TestBerry(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			if list.Count != tt.Reply.Count {
-				t.Fatalf("different count, want: %d, got: %d", tt.Reply.Count, list.Count)
+			diffCompare(t, list, tt.Reply)
+		})
+	}
+}
+
+func TestBerries(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		ID    string
+		Reply pokeapi.Berry
+	}{
+		{
+			ID: "1",
+			Reply: pokeapi.Berry{
+				Firmness: pokeapi.NamedAPIResource{
+					Name: "soft",
+					URL:  "https://pokeapi.co/api/v2/berry-firmness/2/",
+				},
+				Flavors: []pokeapi.BerryFlavorMap{
+					{
+						Flavor: pokeapi.NamedAPIResource{
+							Name: "spicy",
+							URL:  "https://pokeapi.co/api/v2/berry-flavor/1/",
+						},
+						Potency: 10,
+					},
+					{
+						Flavor: pokeapi.NamedAPIResource{
+							Name: "dry",
+							URL:  "https://pokeapi.co/api/v2/berry-flavor/2/",
+						},
+						Potency: 0,
+					},
+					{
+						Flavor: pokeapi.NamedAPIResource{
+							Name: "sweet",
+							URL:  "https://pokeapi.co/api/v2/berry-flavor/3/",
+						},
+						Potency: 0,
+					},
+					{
+						Flavor: pokeapi.NamedAPIResource{
+							Name: "bitter",
+							URL:  "https://pokeapi.co/api/v2/berry-flavor/4/",
+						},
+						Potency: 0,
+					},
+					{
+						Flavor: pokeapi.NamedAPIResource{
+							Name: "sour",
+							URL:  "https://pokeapi.co/api/v2/berry-flavor/5/",
+						},
+						Potency: 0,
+					},
+				},
+				GrowthTime: 3,
+				ID:         1,
+				Item: pokeapi.NamedAPIResource{
+					Name: "cheri-berry",
+					URL:  "https://pokeapi.co/api/v2/item/126/",
+				},
+				MaxHarvest:       5,
+				Name:             "cheri",
+				NaturalGiftPower: 60,
+				NaturalGiftType: pokeapi.NamedAPIResource{
+					Name: "fire",
+					URL:  "https://pokeapi.co/api/v2/type/10/",
+				},
+				Size:        20,
+				Smoothness:  25,
+				SoilDryness: 15,
+			},
+		},
+		{
+			ID: "32",
+			Reply: pokeapi.Berry{
+				Firmness: pokeapi.NamedAPIResource{
+					Name: "very-soft",
+					URL:  "https://pokeapi.co/api/v2/berry-firmness/1/",
+				},
+				Flavors: []pokeapi.BerryFlavorMap{
+					{
+						Flavor: pokeapi.NamedAPIResource{
+							Name: "spicy",
+							URL:  "https://pokeapi.co/api/v2/berry-flavor/1/",
+						},
+						Potency: 0,
+					},
+					{
+						Flavor: pokeapi.NamedAPIResource{
+							Name: "dry",
+							URL:  "https://pokeapi.co/api/v2/berry-flavor/2/",
+						},
+						Potency: 30,
+					},
+					{
+						Flavor: pokeapi.NamedAPIResource{
+							Name: "sweet",
+							URL:  "https://pokeapi.co/api/v2/berry-flavor/3/",
+						},
+						Potency: 10,
+					},
+					{
+						Flavor: pokeapi.NamedAPIResource{
+							Name: "bitter",
+							URL:  "https://pokeapi.co/api/v2/berry-flavor/4/",
+						},
+						Potency: 0,
+					},
+					{
+						Flavor: pokeapi.NamedAPIResource{
+							Name: "sour",
+							URL:  "https://pokeapi.co/api/v2/berry-flavor/5/",
+						},
+						Potency: 0,
+					},
+				},
+				GrowthTime: 15,
+				ID:         32,
+				Item: pokeapi.NamedAPIResource{
+					Name: "pamtre-berry",
+					URL:  "https://pokeapi.co/api/v2/item/157/",
+				},
+				MaxHarvest:       15,
+				Name:             "pamtre",
+				NaturalGiftPower: 70,
+				NaturalGiftType: pokeapi.NamedAPIResource{
+					Name: "steel",
+					URL:  "https://pokeapi.co/api/v2/type/9/",
+				},
+				Size:        244,
+				Smoothness:  35,
+				SoilDryness: 8,
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(fmt.Sprintf("berry/%s", tt.ID), func(t *testing.T) {
+			client := pokeapi.NewClient(nil, nil).WithBaseURL(serverURL)
+			list, err := client.Berry(tt.ID)
+			if err != nil {
+				t.Fatal(err)
 			}
-			if list.Next != tt.Reply.Next {
-				t.Fatalf("different next, want: %q, got: %q", tt.Reply.Next, list.Next)
+			diffCompare(t, list, tt.Reply)
+		})
+	}
+}
+
+func TestBerryFirmnesses(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		ID    string
+		Reply pokeapi.Berry
+	}{
+		{
+			ID: "1",
+			Reply: pokeapi.Berry{
+				Firmness: pokeapi.NamedAPIResource{
+					Name: "soft",
+					URL:  "https://pokeapi.co/api/v2/berry-firmness/2/",
+				},
+				Flavors: []pokeapi.BerryFlavorMap{
+					{
+						Flavor: pokeapi.NamedAPIResource{
+							Name: "spicy",
+							URL:  "https://pokeapi.co/api/v2/berry-flavor/1/",
+						},
+						Potency: 10,
+					},
+					{
+						Flavor: pokeapi.NamedAPIResource{
+							Name: "dry",
+							URL:  "https://pokeapi.co/api/v2/berry-flavor/2/",
+						},
+						Potency: 0,
+					},
+					{
+						Flavor: pokeapi.NamedAPIResource{
+							Name: "sweet",
+							URL:  "https://pokeapi.co/api/v2/berry-flavor/3/",
+						},
+						Potency: 0,
+					},
+					{
+						Flavor: pokeapi.NamedAPIResource{
+							Name: "bitter",
+							URL:  "https://pokeapi.co/api/v2/berry-flavor/4/",
+						},
+						Potency: 0,
+					},
+					{
+						Flavor: pokeapi.NamedAPIResource{
+							Name: "sour",
+							URL:  "https://pokeapi.co/api/v2/berry-flavor/5/",
+						},
+						Potency: 0,
+					},
+				},
+				GrowthTime: 3,
+				ID:         1,
+				Item: pokeapi.NamedAPIResource{
+					Name: "cheri-berry",
+					URL:  "https://pokeapi.co/api/v2/item/126/",
+				},
+				MaxHarvest:       5,
+				Name:             "cheri",
+				NaturalGiftPower: 60,
+				NaturalGiftType: pokeapi.NamedAPIResource{
+					Name: "fire",
+					URL:  "https://pokeapi.co/api/v2/type/10/",
+				},
+				Size:        20,
+				Smoothness:  25,
+				SoilDryness: 15,
+			},
+		},
+		{
+			ID: "32",
+			Reply: pokeapi.Berry{
+				Firmness: pokeapi.NamedAPIResource{
+					Name: "very-soft",
+					URL:  "https://pokeapi.co/api/v2/berry-firmness/1/",
+				},
+				Flavors: []pokeapi.BerryFlavorMap{
+					{
+						Flavor: pokeapi.NamedAPIResource{
+							Name: "spicy",
+							URL:  "https://pokeapi.co/api/v2/berry-flavor/1/",
+						},
+						Potency: 0,
+					},
+					{
+						Flavor: pokeapi.NamedAPIResource{
+							Name: "dry",
+							URL:  "https://pokeapi.co/api/v2/berry-flavor/2/",
+						},
+						Potency: 30,
+					},
+					{
+						Flavor: pokeapi.NamedAPIResource{
+							Name: "sweet",
+							URL:  "https://pokeapi.co/api/v2/berry-flavor/3/",
+						},
+						Potency: 10,
+					},
+					{
+						Flavor: pokeapi.NamedAPIResource{
+							Name: "bitter",
+							URL:  "https://pokeapi.co/api/v2/berry-flavor/4/",
+						},
+						Potency: 0,
+					},
+					{
+						Flavor: pokeapi.NamedAPIResource{
+							Name: "sour",
+							URL:  "https://pokeapi.co/api/v2/berry-flavor/5/",
+						},
+						Potency: 0,
+					},
+				},
+				GrowthTime: 15,
+				ID:         32,
+				Item: pokeapi.NamedAPIResource{
+					Name: "pamtre-berry",
+					URL:  "https://pokeapi.co/api/v2/item/157/",
+				},
+				MaxHarvest:       15,
+				Name:             "pamtre",
+				NaturalGiftPower: 70,
+				NaturalGiftType: pokeapi.NamedAPIResource{
+					Name: "steel",
+					URL:  "https://pokeapi.co/api/v2/type/9/",
+				},
+				Size:        244,
+				Smoothness:  35,
+				SoilDryness: 8,
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(fmt.Sprintf("berry/%s", tt.ID), func(t *testing.T) {
+			client := pokeapi.NewClient(nil, nil).WithBaseURL(serverURL)
+			list, err := client.Berry(tt.ID)
+			if err != nil {
+				t.Fatal(err)
 			}
-			if list.Previous != tt.Reply.Previous {
-				t.Fatalf("different previous, want: %q, got: %q", tt.Reply.Previous, list.Previous)
-			}
-			if len(list.Results) != len(tt.Reply.Results) {
-				t.Fatalf("different result count, want: %d, got: %d", len(tt.Reply.Results), len(list.Results))
-			}
-			for i := range list.Results {
-				if list.Results[i].Name != tt.Reply.Results[i].Name {
-					t.Fatalf("different result.i.Name, want: %q, got: %q", tt.Reply.Results[i].Name, list.Results[i].Name)
-				}
-				if list.Results[i].URL != tt.Reply.Results[i].URL {
-					t.Fatalf("different result.i.URL, want: %q, got: %q", tt.Reply.Results[i].URL, list.Results[i].URL)
-				}
-			}
+			diffCompare(t, list, tt.Reply)
 		})
 	}
 }

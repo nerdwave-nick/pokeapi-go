@@ -2,28 +2,34 @@ package pokeapi
 
 import "fmt"
 
-func (c *Client) Berries(limit int, offset int) (*NamedAPIResourceList, error) {
-	return doUncached[NamedAPIResourceList](c, fmt.Sprintf("berry?limit=%d&offset=%d", limit, offset))
+func (c *Client) Berries(limit int, offset int) (v NamedAPIResourceList, err error) {
+	err = c.doUncached(&v, fmt.Sprintf("berry?limit=%d&offset=%d", limit, offset))
+	return
 }
 
-func (c *Client) Berry(nameOrIdOrUrl string) (*Berry, error) {
-	return do[Berry](c, fmt.Sprintf("berry/%s", nameOrIdOrUrl))
+func (c *Client) Berry(nameOrIdOrUrl string) (v Berry, err error) {
+	err = c.do(&v, fmt.Sprintf("berry/%s", nameOrIdOrUrl))
+	return
 }
 
-func (c *Client) BerryFirmnesses(limit int, offset int) (*NamedAPIResourceList, error) {
-	return doUncached[NamedAPIResourceList](c, fmt.Sprintf("berry-firmness?limit=%d&offset=%d", limit, offset))
+func (c *Client) BerryFirmnesses(limit int, offset int) (v NamedAPIResourceList, err error) {
+	err = c.doUncached(&v, fmt.Sprintf("berry-firmness?limit=%d&offset=%d", limit, offset))
+	return
 }
 
-func (c *Client) BerryFirmness(nameOrIdOrUrl string) (*BerryFirmness, error) {
-	return do[BerryFirmness](c, fmt.Sprintf("berry-firmness/%s", nameOrIdOrUrl))
+func (c *Client) BerryFirmness(nameOrIdOrUrl string) (v BerryFirmness, err error) {
+	err = c.do(&v, fmt.Sprintf("berry-firmness/%s", nameOrIdOrUrl))
+	return
 }
 
-func (c *Client) BerryFlavors(limit int, offset int) (*NamedAPIResourceList, error) {
-	return doUncached[NamedAPIResourceList](c, fmt.Sprintf("berry-flavor?limit=%d&offset=%d", limit, offset))
+func (c *Client) BerryFlavors(limit int, offset int) (v NamedAPIResourceList, err error) {
+	err = c.doUncached(&v, fmt.Sprintf("berry-flavor?limit=%d&offset=%d", limit, offset))
+	return
 }
 
-func (c *Client) BerryFlavor(nameOrIdOrUrl string) (*BerryFlavor, error) {
-	return do[BerryFlavor](c, fmt.Sprintf("berry-flavor/%s", nameOrIdOrUrl))
+func (c *Client) BerryFlavor(nameOrIdOrUrl string) (v BerryFlavor, err error) {
+	err = c.do(&v, fmt.Sprintf("berry-flavor/%s", nameOrIdOrUrl))
+	return
 }
 
 type Berry struct {

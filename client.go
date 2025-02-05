@@ -66,62 +66,57 @@ func (c *Client) sanitizeBaseURL(endpoint string) string {
 	return c.baseUrl + endpoint
 }
 
-func doUncached[T any](c *Client, endpoint string) (*T, error) {
+func (c *Client) doUncached(output any, endpoint string) error {
 	endpoint = c.sanitizeBaseURL(endpoint)
 
 	resp, err := c.client.Get(endpoint)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	v := new(T)
-	err = json.Unmarshal(body, v)
+	err = json.Unmarshal(body, output)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return v, nil
+	return nil
 }
 
-func do[T any](c *Client, endpoint string) (*T, error) {
-	_, after, found := strings.Cut(endpoint, c.baseUrl)
-	if found {
-		endpoint = after
-	}
+func (c *Client) do(output any, endpoint string) error {
+	endpoint = c.sanitizeBaseURL(endpoint)
 
-	value := new(T)
-	found, err := c.cache.Get(endpoint, value)
+	found, err := c.cache.Get(endpoint, output)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	if found {
-		return value, nil
+		return nil
 	}
 
 	resp, err := c.client.Get(endpoint)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	err = json.Unmarshal(body, value)
+	err = json.Unmarshal(body, output)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	err = c.cache.Set(endpoint, value)
+	err = c.cache.Set(endpoint, output)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return value, nil
+	return nil
 }

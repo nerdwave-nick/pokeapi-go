@@ -2,36 +2,44 @@ package pokeapi
 
 import "fmt"
 
-func (c *Client) Locations(limit int, offset int) (*NamedAPIResourceList, error) {
-	return doUncached[NamedAPIResourceList](c, fmt.Sprintf("location?limit=%d&offset=%d", limit, offset))
+func (c *Client) Locations(limit int, offset int) (v NamedAPIResourceList, err error) {
+	err = c.doUncached(&v, fmt.Sprintf("location?limit=%d&offset=%d", limit, offset))
+	return
 }
 
-func (c *Client) Location(nameOrIdOrUrl string) (*Location, error) {
-	return do[Location](c, fmt.Sprintf("location/%s", nameOrIdOrUrl))
+func (c *Client) Location(nameOrIdOrUrl string) (v Location, err error) {
+	err = c.do(&v, fmt.Sprintf("location/%s", nameOrIdOrUrl))
+	return
 }
 
-func (c *Client) LocationAreas(limit int, offset int) (*NamedAPIResourceList, error) {
-	return doUncached[NamedAPIResourceList](c, fmt.Sprintf("location-area?limit=%d&offset=%d", limit, offset))
+func (c *Client) LocationAreas(limit int, offset int) (v NamedAPIResourceList, err error) {
+	err = c.doUncached(&v, fmt.Sprintf("location-area?limit=%d&offset=%d", limit, offset))
+	return
 }
 
-func (c *Client) LocationArea(nameOrIdOrUrl string) (*LocationArea, error) {
-	return do[LocationArea](c, fmt.Sprintf("location-area/%s", nameOrIdOrUrl))
+func (c *Client) LocationArea(nameOrIdOrUrl string) (v LocationArea, err error) {
+	err = c.do(&v, fmt.Sprintf("location-area/%s", nameOrIdOrUrl))
+	return
 }
 
-func (c *Client) PalParkAreas(limit int, offset int) (*NamedAPIResourceList, error) {
-	return doUncached[NamedAPIResourceList](c, fmt.Sprintf("pal-park-area?limit=%d&offset=%d", limit, offset))
+func (c *Client) PalParkAreas(limit int, offset int) (v NamedAPIResourceList, err error) {
+	err = c.doUncached(&v, fmt.Sprintf("pal-park-area?limit=%d&offset=%d", limit, offset))
+	return
 }
 
-func (c *Client) PalParkArea(nameOrIdOrUrl string) (*PalParkArea, error) {
-	return do[PalParkArea](c, fmt.Sprintf("pal-park-area/%s", nameOrIdOrUrl))
+func (c *Client) PalParkArea(nameOrIdOrUrl string) (v PalParkArea, err error) {
+	err = c.do(&v, fmt.Sprintf("pal-park-area/%s", nameOrIdOrUrl))
+	return
 }
 
-func (c *Client) Regions(limit int, offset int) (*NamedAPIResourceList, error) {
-	return doUncached[NamedAPIResourceList](c, fmt.Sprintf("region?limit=%d&offset=%d", limit, offset))
+func (c *Client) Regions(limit int, offset int) (v NamedAPIResourceList, err error) {
+	err = c.doUncached(&v, fmt.Sprintf("region?limit=%d&offset=%d", limit, offset))
+	return
 }
 
-func (c *Client) Region(nameOrIdOrUrl string) (*Region, error) {
-	return do[Region](c, fmt.Sprintf("region/%s", nameOrIdOrUrl))
+func (c *Client) Region(nameOrIdOrUrl string) (v Region, err error) {
+	err = c.do(&v, fmt.Sprintf("region/%s", nameOrIdOrUrl))
+	return
 }
 
 type Location struct {

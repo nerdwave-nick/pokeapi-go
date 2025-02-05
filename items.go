@@ -2,44 +2,54 @@ package pokeapi
 
 import "fmt"
 
-func (c *Client) Items(limit int, offset int) (*NamedAPIResourceList, error) {
-	return doUncached[NamedAPIResourceList](c, fmt.Sprintf("item?limit=%d&offset=%d", limit, offset))
+func (c *Client) Items(limit int, offset int) (v NamedAPIResourceList, err error) {
+	err = c.doUncached(&v, fmt.Sprintf("item?limit=%d&offset=%d", limit, offset))
+	return
 }
 
-func (c *Client) Item(nameOrIdOrUrl string) (*Item, error) {
-	return do[Item](c, fmt.Sprintf("item/%s", nameOrIdOrUrl))
+func (c *Client) Item(nameOrIdOrUrl string) (v Item, err error) {
+	err = c.do(&v, fmt.Sprintf("item/%s", nameOrIdOrUrl))
+	return
 }
 
-func (c *Client) ItemAttributes(limit int, offset int) (*NamedAPIResourceList, error) {
-	return doUncached[NamedAPIResourceList](c, fmt.Sprintf("item-attribute?limit=%d&offset=%d", limit, offset))
+func (c *Client) ItemAttributes(limit int, offset int) (v NamedAPIResourceList, err error) {
+	err = c.doUncached(&v, fmt.Sprintf("item-attribute?limit=%d&offset=%d", limit, offset))
+	return
 }
 
-func (c *Client) ItemAttribute(nameOrIdOrUrl string) (*ItemAttribute, error) {
-	return do[ItemAttribute](c, fmt.Sprintf("item-attribute/%s", nameOrIdOrUrl))
+func (c *Client) ItemAttribute(nameOrIdOrUrl string) (v ItemAttribute, err error) {
+	err = c.do(&v, fmt.Sprintf("item-attribute/%s", nameOrIdOrUrl))
+	return
 }
 
-func (c *Client) ItemCategories(limit int, offset int) (*NamedAPIResourceList, error) {
-	return doUncached[NamedAPIResourceList](c, fmt.Sprintf("item-category?limit=%d&offset=%d", limit, offset))
+func (c *Client) ItemCategories(limit int, offset int) (v NamedAPIResourceList, err error) {
+	err = c.doUncached(&v, fmt.Sprintf("item-category?limit=%d&offset=%d", limit, offset))
+	return
 }
 
-func (c *Client) ItemCategory(nameOrIdOrUrl string) (*ItemCategory, error) {
-	return do[ItemCategory](c, fmt.Sprintf("item-category/%s", nameOrIdOrUrl))
+func (c *Client) ItemCategory(nameOrIdOrUrl string) (v ItemCategory, err error) {
+	err = c.do(&v, fmt.Sprintf("item-category/%s", nameOrIdOrUrl))
+	return
 }
 
-func (c *Client) ItemFlingEffects(limit int, offset int) (*NamedAPIResourceList, error) {
-	return doUncached[NamedAPIResourceList](c, fmt.Sprintf("item-fling-effect?limit=%d&offset=%d", limit, offset))
+func (c *Client) ItemFlingEffects(limit int, offset int) (v NamedAPIResourceList, err error) {
+	err = c.doUncached(&v, fmt.Sprintf("item-fling-effect?limit=%d&offset=%d", limit, offset))
+	return
 }
 
-func (c *Client) ItemFlingEffect(nameOrIdOrUrl string) (*ItemFlingEffect, error) {
-	return do[ItemFlingEffect](c, fmt.Sprintf("item-fling-effect/%s", nameOrIdOrUrl))
+func (c *Client) ItemFlingEffect(nameOrIdOrUrl string) (v ItemFlingEffect, err error) {
+	err = c.do(&v, fmt.Sprintf("item-fling-effect/%s", nameOrIdOrUrl))
+	return
 }
 
-func (c *Client) ItemPockets(limit int, offset int) (*NamedAPIResourceList, error) {
-	return doUncached[NamedAPIResourceList](c, fmt.Sprintf("item-pocket?limit=%d&offset=%d", limit, offset))
+func (c *Client) ItemPockets(limit int, offset int) (v NamedAPIResourceList, err error) {
+	err = c.doUncached(&v, fmt.Sprintf("item-pocket?limit=%d&offset=%d", limit, offset))
+	return
 }
 
-func (c *Client) ItemPocket(nameOrIdOrUrl string) (*ItemPocket, error) {
-	return do[ItemPocket](c, fmt.Sprintf("item-pocket/%s", nameOrIdOrUrl))
+func (c *Client) ItemPocket(nameOrIdOrUrl string) (v ItemPocket, err error) {
+	err = c.do(&v, fmt.Sprintf("item-pocket/%s", nameOrIdOrUrl))
+	return
 }
 
 type Item struct {

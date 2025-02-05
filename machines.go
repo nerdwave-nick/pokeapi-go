@@ -2,12 +2,14 @@ package pokeapi
 
 import "fmt"
 
-func (c *Client) Machines(limit int, offset int) (*NamedAPIResourceList, error) {
-	return doUncached[NamedAPIResourceList](c, fmt.Sprintf("machine?limit=%d&offset=%d", limit, offset))
+func (c *Client) Machines(limit int, offset int) (v NamedAPIResourceList, err error) {
+	err = c.doUncached(&v, fmt.Sprintf("machine?limit=%d&offset=%d", limit, offset))
+	return
 }
 
-func (c *Client) Machine(idOrUrl string) (*Machine, error) {
-	return do[Machine](c, fmt.Sprintf("machine/%s", idOrUrl))
+func (c *Client) Machine(idOrUrl string) (v Machine, err error) {
+	err = c.do(&v, fmt.Sprintf("machine/%s", idOrUrl))
+	return
 }
 
 type Machine struct {

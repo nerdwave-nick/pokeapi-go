@@ -2,12 +2,14 @@ package pokeapi
 
 import "fmt"
 
-func (c *Client) Languages(limit int, offset int) (*NamedAPIResourceList, error) {
-	return doUncached[NamedAPIResourceList](c, fmt.Sprintf("language?limit=%d&offset=%d", limit, offset))
+func (c *Client) Languages(limit int, offset int) (v NamedAPIResourceList, err error) {
+	err = c.doUncached(&v, fmt.Sprintf("language?limit=%d&offset=%d", limit, offset))
+	return
 }
 
-func (c *Client) Language(nameOrIdOrUrl string) (*Language, error) {
-	return do[Language](c, fmt.Sprintf("language/%s", nameOrIdOrUrl))
+func (c *Client) Language(nameOrIdOrUrl string) (v Language, err error) {
+	err = c.do(&v, fmt.Sprintf("language/%s", nameOrIdOrUrl))
+	return
 }
 
 type NamedAPIResourceList struct {

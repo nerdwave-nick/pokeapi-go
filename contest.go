@@ -2,28 +2,34 @@ package pokeapi
 
 import "fmt"
 
-func (c *Client) ContestTypes(limit int, offset int) (*NamedAPIResourceList, error) {
-	return doUncached[NamedAPIResourceList](c, fmt.Sprintf("contest-type?limit=%d&offset=%d", limit, offset))
+func (c *Client) ContestTypes(limit int, offset int) (v NamedAPIResourceList, err error) {
+	err = c.doUncached(&v, fmt.Sprintf("contest-type?limit=%d&offset=%d", limit, offset))
+	return
 }
 
-func (c *Client) ContestType(nameOrIdOrUrl string) (*ContestType, error) {
-	return do[ContestType](c, fmt.Sprintf("contest-type/%s", nameOrIdOrUrl))
+func (c *Client) ContestType(nameOrIdOrUrl string) (v ContestType, err error) {
+	err = c.do(&v, fmt.Sprintf("contest-type/%s", nameOrIdOrUrl))
+	return
 }
 
-func (c *Client) ContestEffects(limit int, offset int) (*APIResourceList, error) {
-	return doUncached[APIResourceList](c, fmt.Sprintf("contest-effect?limit=%d&offset=%d", limit, offset))
+func (c *Client) ContestEffects(limit int, offset int) (v APIResourceList, err error) {
+	err = c.doUncached(&v, fmt.Sprintf("contest-effect?limit=%d&offset=%d", limit, offset))
+	return
 }
 
-func (c *Client) ContestEffect(idOrUrl string) (*ContestEffect, error) {
-	return do[ContestEffect](c, fmt.Sprintf("contest-effect/%s", idOrUrl))
+func (c *Client) ContestEffect(idOrUrl string) (v ContestEffect, err error) {
+	err = c.do(&v, fmt.Sprintf("contest-effect/%s", idOrUrl))
+	return
 }
 
-func (c *Client) SuperContestEffects(limit int, offset int) (*APIResourceList, error) {
-	return doUncached[APIResourceList](c, fmt.Sprintf("super-contest-effect?limit=%d&offset=%d", limit, offset))
+func (c *Client) SuperContestEffects(limit int, offset int) (v APIResourceList, err error) {
+	err = c.doUncached(&v, fmt.Sprintf("super-contest-effect?limit=%d&offset=%d", limit, offset))
+	return
 }
 
-func (c *Client) SuperContestEffect(idOrUrl string) (*SuperContestEffect, error) {
-	return do[SuperContestEffect](c, fmt.Sprintf("super-contest-effect/%s", idOrUrl))
+func (c *Client) SuperContestEffect(idOrUrl string) (v SuperContestEffect, err error) {
+	err = c.do(&v, fmt.Sprintf("super-contest-effect/%s", idOrUrl))
+	return
 }
 
 type ContestType struct {

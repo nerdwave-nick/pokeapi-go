@@ -2,28 +2,34 @@ package pokeapi
 
 import "fmt"
 
-func (c *Client) EncounterMethods(limit int, offset int) (*NamedAPIResourceList, error) {
-	return doUncached[NamedAPIResourceList](c, fmt.Sprintf("encounter-method?limit=%d&offset=%d", limit, offset))
+func (c *Client) EncounterMethods(limit int, offset int) (v NamedAPIResourceList, err error) {
+	err = c.doUncached(&v, fmt.Sprintf("encounter-method?limit=%d&offset=%d", limit, offset))
+	return
 }
 
-func (c *Client) EncounterMethod(nameOrIdOrUrl string) (*EncounterMethod, error) {
-	return do[EncounterMethod](c, fmt.Sprintf("encounter-method/%s", nameOrIdOrUrl))
+func (c *Client) EncounterMethod(nameOrIdOrUrl string) (v EncounterMethod, err error) {
+	err = c.do(&v, fmt.Sprintf("encounter-method/%s", nameOrIdOrUrl))
+	return
 }
 
-func (c *Client) EncounterConditions(limit int, offset int) (*NamedAPIResourceList, error) {
-	return doUncached[NamedAPIResourceList](c, fmt.Sprintf("encounter-condition?limit=%d&offset=%d", limit, offset))
+func (c *Client) EncounterConditions(limit int, offset int) (v NamedAPIResourceList, err error) {
+	err = c.doUncached(&v, fmt.Sprintf("encounter-condition?limit=%d&offset=%d", limit, offset))
+	return
 }
 
-func (c *Client) EncounterCondition(nameOrIdOrUrl string) (*EncounterCondition, error) {
-	return do[EncounterCondition](c, fmt.Sprintf("encounter-condition/%s", nameOrIdOrUrl))
+func (c *Client) EncounterCondition(nameOrIdOrUrl string) (v EncounterCondition, err error) {
+	err = c.do(&v, fmt.Sprintf("encounter-condition/%s", nameOrIdOrUrl))
+	return
 }
 
-func (c *Client) EncounterConditionValues(limit int, offset int) (*NamedAPIResourceList, error) {
-	return doUncached[NamedAPIResourceList](c, fmt.Sprintf("encounter-condition-value?limit=%d&offset=%d", limit, offset))
+func (c *Client) EncounterConditionValues(limit int, offset int) (v NamedAPIResourceList, err error) {
+	err = c.doUncached(&v, fmt.Sprintf("encounter-condition-value?limit=%d&offset=%d", limit, offset))
+	return
 }
 
-func (c *Client) EncounterConditionValue(nameOrIdOrUrl string) (*EncounterConditionValue, error) {
-	return do[EncounterConditionValue](c, fmt.Sprintf("encounter-condition-value/%s", nameOrIdOrUrl))
+func (c *Client) EncounterConditionValue(nameOrIdOrUrl string) (v EncounterConditionValue, err error) {
+	err = c.do(&v, fmt.Sprintf("encounter-condition-value/%s", nameOrIdOrUrl))
+	return
 }
 
 type EncounterMethod struct {

@@ -2,20 +2,24 @@ package pokeapi
 
 import "fmt"
 
-func (c *Client) EvolutionChains(limit int, offset int) (*APIResourceList, error) {
-	return doUncached[APIResourceList](c, fmt.Sprintf("evolution-chain?limit=%d&offset=%d", limit, offset))
+func (c *Client) EvolutionChains(limit int, offset int) (v APIResourceList, err error) {
+	err = c.doUncached(&v, fmt.Sprintf("evolution-chain?limit=%d&offset=%d", limit, offset))
+	return
 }
 
-func (c *Client) EvolutionChain(idOrUrl string) (*EvolutionChain, error) {
-	return do[EvolutionChain](c, fmt.Sprintf("evolution-chain/%s", idOrUrl))
+func (c *Client) EvolutionChain(idOrUrl string) (v EvolutionChain, err error) {
+	err = c.do(&v, fmt.Sprintf("evolution-chain/%s", idOrUrl))
+	return
 }
 
-func (c *Client) EvolutionTriggers(limit int, offset int) (*NamedAPIResourceList, error) {
-	return doUncached[NamedAPIResourceList](c, fmt.Sprintf("evolution-trigger?limit=%d&offset=%d", limit, offset))
+func (c *Client) EvolutionTriggers(limit int, offset int) (v NamedAPIResourceList, err error) {
+	err = c.doUncached(&v, fmt.Sprintf("evolution-trigger?limit=%d&offset=%d", limit, offset))
+	return
 }
 
-func (c *Client) EvolutionTrigger(nameOrIdOrUrl string) (*EvolutionTrigger, error) {
-	return do[EvolutionTrigger](c, fmt.Sprintf("evolution-trigger/%s", nameOrIdOrUrl))
+func (c *Client) EvolutionTrigger(nameOrIdOrUrl string) (v EvolutionTrigger, err error) {
+	err = c.do(&v, fmt.Sprintf("evolution-trigger/%s", nameOrIdOrUrl))
+	return
 }
 
 type EvolutionChain struct {
